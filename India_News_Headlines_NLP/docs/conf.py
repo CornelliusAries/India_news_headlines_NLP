@@ -164,7 +164,7 @@ html_static_path = ['_static']
 # html_file_suffix = None
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'Repo_namedoc'
+htmlhelp_basename = 'India_News_Headlines_NLPdoc'
 
 
 # -- Options for LaTeX output --------------------------------------------------
@@ -184,7 +184,7 @@ latex_elements = {
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
     ('index',
-     'Repo_name.tex',
+     'India_News_Headlines_NLP.tex',
      u'India_News_Headlines_NLP Documentation',
      u"Group35", 'manual'),
 ]
@@ -215,7 +215,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'Repo_name', u'India_News_Headlines_NLP Documentation',
+    ('index', 'India_News_Headlines_NLP', u'India_News_Headlines_NLP Documentation',
      [u"Group35"], 1)
 ]
 
@@ -229,9 +229,9 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    ('index', 'Repo_name', u'India_News_Headlines_NLP Documentation',
+    ('index', 'India_News_Headlines_NLP', u'India_News_Headlines_NLP Documentation',
      u"Group35", 'India_News_Headlines_NLP',
-     'NLP project ', 'Miscellaneous'),
+     'NLP project using Cookiecutter structure', 'Miscellaneous'),
 ]
 
 # Documents to append as an appendix to all manuals.

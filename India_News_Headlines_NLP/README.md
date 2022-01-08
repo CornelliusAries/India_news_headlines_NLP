@@ -1,7 +1,7 @@
 India_News_Headlines_NLP
 ==============================
 
-NLP project 
+NLP project using Cookiecutter structure
 
 Project Organization
 ------------
