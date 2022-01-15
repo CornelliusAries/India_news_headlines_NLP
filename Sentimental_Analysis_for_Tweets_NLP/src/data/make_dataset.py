@@ -6,6 +6,7 @@ from spacy.lang.en import English
 import logging
 from pathlib import Path
 from csv import reader
+import pandas as pd
 import sys
 import os
 import re
@@ -58,26 +59,21 @@ def main(input_filepath, output_filepath):
     labels = []
     features = []
 
+    global bgl_dict, bgl_df, war_dict, war_df
+    bgl_dict, bgl_df = read_word_score(bgl_path, bgl_col)
+    war_dict, war_df = read_word_score(war_path, war_col)
+
     for filename in os.listdir(input_filepath):
-        if filename != '.gitkeep' and filename != '.DS_Store':
+        if filename.endswith('.csv'):
             filepath = os.path.join(input_filepath, filename)
-            with open(filepath, 'r') as read_obj:
-                csv_reader = reader(read_obj)
-                process_bar = ShowProcess(sum(1 for row in csv_reader), 'OK')
-                for row in csv_reader:
-                    tweet = row[1]
-                    label = row[-1]
-                    labels.append(label)
+            df = pd.read_csv(filepath)
+            df['label (depression result)'] = df['label (depression result)'].astype(int)
+            df['preprocessed'] = df['message to examine'].apply(preproc)
+            df['features'] = df['preprocessed'].apply(extract_features)
 
-                    preprocessed_tweet = preproc(tweet)
-                    feature_arr = extract_features(preprocessed_tweet)
-                    features.append(feature_arr)
 
-                    process_bar.show_process()
-                    time.sleep(0.05)
-
-    labels_tensor = torch.tensor(np.array(labels))
-    features_tensor = torch.tensor(np.array(features))
+    features_tensor = torch.cat(df['features'].tolist(), dim = 0)
+    labels_tensor  = torch.tensor(df['label (depression result)'].values)
 
     labels_out_path = os.path.join(output_filepath, 'labels')
     torch.save(labels_tensor, labels_out_path)
@@ -85,7 +81,8 @@ def main(input_filepath, output_filepath):
     features_out_path = os.path.join(output_filepath, 'features')
     torch.save(features_tensor, features_out_path)
 
-    return 0
+    return None
+
 
 def preproc(tweet, steps=range(1, 6)):
     ''' This function pre-processes a single tweet
@@ -175,9 +172,6 @@ def extract_features(tweet):
     Returns:
         features : numpy Array, a 173-length vector of floating point features (only the first 29 are expected to be filled, here)
     '''
-
-    bgl_dict, bgl_df = read_word_score(bgl_path, bgl_col)
-    war_dict, war_df = read_word_score(war_path, war_col)
 
     # Initialize Feature Array
     feature_arr = np.zeros(29)
@@ -283,41 +277,10 @@ def extract_features(tweet):
         feature_arr[26:29] = np.std(war_df[:, war_lemma_lst], axis=1)
 
     # If any the statistical value is not applicable, set to default = 0
-    feature_arr[np.isnan(feature_arr)] = 0
-
-    return feature_arr
-
-
-class ShowProcess():
-    i = 0
-    max_steps = 0
-    max_arrow = 50
-    infoDone = 'done'
-
-    def __init__(self, max_steps, infoDone = 'Done'):
-        self.max_steps = max_steps
-        self.i = 0
-        self.infoDone = infoDone
-
-    def show_process(self, i=None):
-        if i is not None:
-            self.i = i
-        else:
-            self.i += 1
-        num_arrow = int(self.i * self.max_arrow / self.max_steps)
-        num_line = self.max_arrow - num_arrow
-        percent = self.i * 100.0 / self.max_steps
-        process_bar = '[' + '>' * num_arrow + '-' * num_line + ']'\
-                      + '%.2f' % percent + '%' + '\r'
-        sys.stdout.write(process_bar)
-        sys.stdout.flush()
-        if self.i >= self.max_steps:
-            self.close()
-
-    def close(self):
-        print('')
-        print(self.infoDone)
-        self.i = 0
+    # feature_arr[np.isnan(feature_arr)] = 0
+    feature_arr = np.nan_to_num(feature_arr) 
+    feature_arr = feature_arr.astype(np.float64)
+    return torch.tensor(feature_arr).resize_(1, 29)
 
 
 if __name__ == '__main__':
