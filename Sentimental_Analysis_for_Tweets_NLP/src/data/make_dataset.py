@@ -3,11 +3,13 @@ import click
 import torch
 from dotenv import find_dotenv, load_dotenv
 from spacy.lang.en import English
+from torch.utils.data import DataLoader, Dataset
 import logging
 from pathlib import Path
 from csv import reader
 import pandas as pd
 import sys
+import glob
 import os
 import re
 import time
@@ -45,43 +47,82 @@ war_col = [1,2,5,8]
 tag_idx_dict = {"CC":4, "VBD":5, "NN":9, "NNS": 9, "NNP":10, "NNPS":10,
                 "RB":11, "RBR":11, "RBS":11, "WDT":12, "WP":12, "WP$":12, "WRB":12}
 
+# class TweetDataset(Dataset):
+#     def __init__(self, inputfile_path, )
+
+class TweetDataset(Dataset):
+    def __init__(self, input_filepath):
+        # for filename in os.listdir(input_filepath):
+        os.chdir(input_filepath)
+        extension = 'csv'
+        all_csv = [i for i in glob.glob('*.{}'.format(extension))]
+        df = pd.concat([pd.read_csv(f) for f in all_csv])
+        df['label (depression result)'] = df['label (depression result)'].astype(int)
+        df['features'] = df['message to examine'].apply(process_tweet)
+
+        labels_tensor  = torch.tensor(df['label (depression result)'].values)
+        features_tensor = torch.cat(df['features'].tolist(), dim = 0)
+
+        self.labels = labels_tensor
+        self.features = features_tensor
+
+    def __len__(self):
+        return len(self.labels)
+
+    def __getitem__(self, idx):
+        # img_path = os.path.join(self.img_dir, self.img_labels.iloc[idx, 0])
+        # image = read_image(img_path)
+        # label = self.img_labels.iloc[idx, 1]
+        # if self.transform:
+        #     image = self.transform(image)
+        # if self.target_transform:
+        #     label = self.target_transform(label)
+        return self.features[idx, :], self.labels[idx]
+
 @click.command()
 @click.argument('input_filepath', type=click.Path(exists=True))
 @click.argument('output_filepath', type=click.Path())
-
 
 def main(input_filepath, output_filepath):
     """ Runs data processing scripts to turn raw data from (../raw) into
         cleaned data ready to be analyzed (saved in ../processed).
     """
-    # logger = logging.getLogger(__name__)
-    # logger.info('making final data set from raw data')
-    labels = []
-    features = []
 
     global bgl_dict, bgl_df, war_dict, war_df
     bgl_dict, bgl_df = read_word_score(bgl_path, bgl_col)
     war_dict, war_df = read_word_score(war_path, war_col)
 
-    for filename in os.listdir(input_filepath):
-        if filename.endswith('.csv'):
-            filepath = os.path.join(input_filepath, filename)
-            df = pd.read_csv(filepath)
-            df['label (depression result)'] = df['label (depression result)'].astype(int)
-            df['preprocessed'] = df['message to examine'].apply(preproc)
-            df['features'] = df['preprocessed'].apply(extract_features)
+    dataset = TweetDataset(input_filepath)
+    dataloader = DataLoader(dataset, batch_size=64, shuffle=False, num_workers=4)
+    ## logger = logging.getLogger(__name__)
+    ## logger.info('making final data set from raw data')
+
+    # for filename in os.listdir(input_filepath):
+    #     if filename.endswith('.csv'):
+    #         filepath = os.path.join(input_filepath, filename)
+    #         df = pd.read_csv(filepath)
+    #         df['label (depression result)'] = df['label (depression result)'].astype(int)
+    #         df['preprocessed'] = df['message to examine'].apply(preproc)
+    #         df['features'] = df['preprocessed'].apply(extract_features)
 
 
-    features_tensor = torch.cat(df['features'].tolist(), dim = 0)
-    labels_tensor  = torch.tensor(df['label (depression result)'].values)
+    # features_tensor = torch.cat(df['features'].tolist(), dim = 0)
+    # labels_tensor  = torch.tensor(df['label (depression result)'].values)
 
-    labels_out_path = os.path.join(output_filepath, 'labels')
-    torch.save(labels_tensor, labels_out_path)
+    # labels_out_path = os.path.join(output_filepath, 'labels')
+    # torch.save(labels_tensor, labels_out_path)
 
-    features_out_path = os.path.join(output_filepath, 'features')
-    torch.save(features_tensor, features_out_path)
+    # features_out_path = os.path.join(output_filepath, 'features')
+    # torch.save(features_tensor, features_out_path)
+
+    
 
     return None
+
+def process_tweet(tweet):
+    preprocssed = preproc(tweet)
+    features = extract_features(preprocssed)
+    return features
 
 
 def preproc(tweet, steps=range(1, 6)):
