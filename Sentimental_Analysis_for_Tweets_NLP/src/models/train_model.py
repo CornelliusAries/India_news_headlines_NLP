@@ -13,7 +13,7 @@ from textwrap import wrap
 from torch import nn, optim
 from torch.utils.data import Dataset, DataLoader
 import torch.nn.functional as F
-import glob
+
 import logging
 from pathlib import Path
 
@@ -21,7 +21,6 @@ import click
 import matplotlib.pyplot as plt
 import numpy as np
 import torch
-import torchvision
 from dotenv import find_dotenv, load_dotenv
 
 from torch import nn, optim
