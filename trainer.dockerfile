@@ -6,10 +6,10 @@ RUN apt update && \
 apt install --no-install-recommends -y build-essential gcc && \
 apt clean && rm -rf /var/lib/apt/lists/*
 
-COPY requirements.txt requirements.txt
-COPY setup.py setup.py
-COPY src/ src/
-COPY data/ data/
+COPY Sentimental_Analysis_for_Tweets_NLP/requirements.txt requirements.txt
+COPY Sentimental_Analysis_for_Tweets_NLP/setup.py setup.py
+COPY Sentimental_Analysis_for_Tweets_NLP/src/ src/
+COPY Sentimental_Analysis_for_Tweets_NLP/data/ data/
 
 WORKDIR /
 RUN pip install -r requirements.txt --no-cache-dir
