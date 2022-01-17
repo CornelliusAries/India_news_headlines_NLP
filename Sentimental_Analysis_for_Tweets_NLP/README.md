@@ -1,4 +1,4 @@
-India_News_Headlines_NLP
+Sentimental_Analysis_for_Tweets_NLP
 ==============================
 
 NLP project using Cookiecutter structure
