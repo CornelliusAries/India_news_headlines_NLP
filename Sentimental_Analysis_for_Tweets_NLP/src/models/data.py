@@ -11,7 +11,8 @@ MAX_LEN = 160
 BATCH_SIZE = 16
 EPOCHS = 10
     
-df = pd.read_csv('sentiment_tweets3.csv', encoding = 'latin-1')
+# df = pd.read_csv('sentiment_tweets3.csv', encoding = 'latin-1')
+df = pd.read_csv('data/raw/sentiment_tweets3.csv', encoding = 'latin-1')
 tokenizer = BertTokenizer.from_pretrained(PRE_TRAINED_MODEL_NAME)
 
 df_train, df_test = train_test_split(df, test_size = 0.2, random_state = 42)
