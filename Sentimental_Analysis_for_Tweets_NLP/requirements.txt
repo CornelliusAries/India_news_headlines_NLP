@@ -9,4 +9,4 @@ torch==1.10.1
 transformers==4.15.0
 sklearn
 matplotlib
-hypertune
+cloudml-hypertune

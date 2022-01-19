@@ -154,7 +154,7 @@ def main():
     best_accuracy = 0
 
     for epoch in range(1, args.epochs + 1):
-        print(f'Epoch {epoch + 1}/{args.epochs + 1}')
+        print(f'Epoch {epoch}/{args.epochs}')
         print('-' * 10)
 
         train_acc, train_loss = train_epoch(model,

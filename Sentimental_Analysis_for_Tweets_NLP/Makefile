@@ -30,9 +30,11 @@ data: requirements
 	$(PYTHON_INTERPRETER) src/data/make_dataset.py data/raw data/processed
 
 ## Train model
+#train: requirements
+#	$(PYTHON_INTERPRETER) src/models/train_model_gcp.py
+
 train: requirements
 	$(PYTHON_INTERPRETER) src/models/train_model.py models data/raw reports/figures
-
 ## Delete all compiled Python files
 clean:
 	find . -type f -name "*.py[co]" -delete

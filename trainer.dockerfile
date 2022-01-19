@@ -42,4 +42,4 @@ COPY Sentimental_Analysis_for_Tweets_NLP/data/ /root/data/
 
 RUN pip install -r /root/requirements.txt --no-cache-dir
 
-ENTRYPOINT ["python", "root/src/models/train_model_gcp.py"]
+ENTRYPOINT ["python", "/root/src/models/train_model_gcp.py"]
