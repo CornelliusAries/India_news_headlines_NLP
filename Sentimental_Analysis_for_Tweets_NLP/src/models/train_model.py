@@ -119,7 +119,7 @@ def main(model_output_filepath="models", data_filepath="data/processed", figures
         history['train_loss'].append(train_loss)
         history['val_acc'].append(val_acc)
         history['val_loss'].append(val_loss)
-        torch.save(model.state_dict(), model_output_filepath + f"/{PRE_TRAINED_MODEL_NAME}_depression_classifier.pth")
+    torch.save(model.state_dict(), model_output_filepath + f"/{PRE_TRAINED_MODEL_NAME}_depression_classifier.pth")
     
     loss_accuracy_plots(history, figures_output_filepath)
         
