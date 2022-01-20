@@ -1,0 +1,12 @@
+click==8.0.3
+numpy==1.20.3
+pandas==1.3.4
+python-dotenv==0.19.2
+pytorch_lightning==1.5.8
+setuptools==60.5.0
+spacy==3.2.1
+torch==1.10.1
+transformers==4.15.0
+sklearn
+matplotlib
+cloudml-hypertune
