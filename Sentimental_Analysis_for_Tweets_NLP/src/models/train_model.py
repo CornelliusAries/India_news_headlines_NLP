@@ -41,7 +41,7 @@ def main(model_output_filepath="models", data_filepath="data/processed", figures
     PRE_TRAINED_MODEL_NAME = 'bert-base-cased'
     MAX_LEN = 160
     BATCH_SIZE = 16
-    EPOCHS = 10
+    EPOCHS = 5
     
     #Reading raw data
     df = pd.read_csv(f'{data_filepath}/sentiment_tweets3.csv', encoding = 'latin-1')
