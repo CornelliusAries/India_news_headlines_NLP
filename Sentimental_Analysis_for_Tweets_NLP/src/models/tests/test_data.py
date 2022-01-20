@@ -11,7 +11,7 @@ from transformers import BertTokenizer
 from sklearn.model_selection import train_test_split
 
 
-df = pd.read_csv(f'sentiment_tweets3.csv', encoding = 'latin-1')
+df = pd.read_csv(f'../../data/raw/sentiment_tweets3.csv', encoding = 'latin-1')
 tokenizer = BertTokenizer.from_pretrained('bert-base-cased')
 
 df_train, df_test = train_test_split(df, test_size = 0.2, random_state = 42)

@@ -22,7 +22,7 @@ PRE_TRAINED_MODEL_NAME = 'bert-base-cased'
 class_names = ['Not Depressed', 'Depressed']
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
-df = pd.read_csv(f'sentiment_tweets3.csv', encoding = 'latin-1')
+df = pd.read_csv(f'../../data/raw/sentiment_tweets3.csv', encoding = 'latin-1')
 tokenizer = BertTokenizer.from_pretrained('bert-base-cased')
 loss_fn = nn.CrossEntropyLoss()
 
