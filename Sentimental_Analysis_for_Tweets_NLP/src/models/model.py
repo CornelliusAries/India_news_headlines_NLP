@@ -1,5 +1,6 @@
 from transformers import BertModel, AdamW
 import torch.nn.functional as F
+import numpy as np
 import torch
 import pytorch_lightning as pl
 from matplotlib import rc
@@ -27,22 +28,34 @@ class DepressionClassifier(pl.LightningModule):
     return self.out(output)
 
   def training_step(self, train_batch, batch_idx):
-    input_ids = train_batch["input_ids"].to(device)
-    attention_mask = train_batch["attention_mask"].to(device)
-    labels = train_batch["depression"].to(device)
-    outputs = self.forward(input_ids, attention_mask)
-    loss = F.cross_entropy(outputs, labels)
-    self.log('train loss', loss)
+    losses = []
+    for train_data in train_batch:
+      input_ids = train_data["input_ids"].to(device)
+      attention_mask = train_data["attention_mask"].to(device)
+      depression = train_data["depression"].to(device)
+      
+      outputs = self.forward(input_ids = input_ids,
+      attention_mask = attention_mask)
 
+      loss = F.cross_entropy(outputs, depression)
+      losses.append(loss.item())
+    self.log('train loss', np.mean(losses))
     return loss
 
   def validation_step(self, val_batch, batch_idx):
-    input_ids = val_batch["input_ids"].to(device)
-    attention_mask = val_batch["attention_mask"].to(device)
-    labels = val_batch["depression"].to(device)
-    outputs = self.forward(input_ids, attention_mask)
-    loss = F.cross_entropy(outputs, labels)
-    self.log('train loss', loss)
+    losses = []
+    for val_data in val_batch:
+      input_ids = val_data["input_ids"].to(device)
+      attention_mask = val_data["attention_mask"].to(device)
+      depression = val_data["depression"].to(device)
+      
+      outputs = self.forward(input_ids = input_ids,
+      attention_mask = attention_mask)
+
+      loss = F.cross_entropy(outputs, depression)
+      losses.append(loss.item())
+    self.log('train loss', np.mean(losses))
+    return loss
 
 
   def configure_optimizers(self):
