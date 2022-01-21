@@ -1,5 +1,11 @@
 import sys
-sys.path.append(".")
+# sys.path.append("../Sentimental_Analysis_for_Tweets_NLP/src/models")
+import os
+_TEST_ROOT = os.path.dirname(__file__)
+_HOME_ROOT = os.path.dirname(_TEST_ROOT)
+_PROJECT_ROOT = os.path.join(_HOME_ROOT, "Sentimental_Analysis_for_Tweets_NLP/src/models")
+_DATA_ROOT = os.path.join(_HOME_ROOT, "Sentimental_Analysis_for_Tweets_NLP/data/raw/sentiment_tweets3.csv")
+sys.path.append(_PROJECT_ROOT)
 
 
 # from TweetsDataset import *
@@ -20,7 +26,7 @@ BATCH_SIZE = 16
 PRE_TRAINED_MODEL_NAME = 'bert-base-cased'
 class_names = ['Not Depressed', 'Depressed']
 
-df = pd.read_csv(f'../../data/raw/sentiment_tweets3.csv', encoding = 'latin-1')
+df = pd.read_csv(_DATA_ROOT, encoding = 'latin-1')
 tokenizer = BertTokenizer.from_pretrained('bert-base-cased')
 
 df_train, df_test = train_test_split(df, test_size = 0.2, random_state = 42)

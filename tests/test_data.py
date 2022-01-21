@@ -1,5 +1,11 @@
-import sys
-sys.path.append(".")
+import os, sys
+_TEST_ROOT = os.path.dirname(__file__)
+_HOME_ROOT = os.path.dirname(_TEST_ROOT)
+_PROJECT_ROOT = os.path.join(_HOME_ROOT, "Sentimental_Analysis_for_Tweets_NLP/src/models")
+_DATA_ROOT = os.path.join(_HOME_ROOT, "Sentimental_Analysis_for_Tweets_NLP/data/raw/sentiment_tweets3.csv")
+sys.path.append(_PROJECT_ROOT)
+
+# sys.path.append("../Sentimental_Analysis_for_Tweets_NLP/src/models")
 
 # from TweetsDataset import *
 from TweetsDataset import TweetsDataset
@@ -11,7 +17,7 @@ from transformers import BertTokenizer
 from sklearn.model_selection import train_test_split
 
 
-df = pd.read_csv(f'../../data/raw/sentiment_tweets3.csv', encoding = 'latin-1')
+df = pd.read_csv(_DATA_ROOT, encoding = 'latin-1')
 tokenizer = BertTokenizer.from_pretrained('bert-base-cased')
 
 df_train, df_test = train_test_split(df, test_size = 0.2, random_state = 42)

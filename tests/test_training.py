@@ -1,5 +1,11 @@
 import sys
-sys.path.append(".")
+import os
+_TEST_ROOT = os.path.dirname(__file__)
+_HOME_ROOT = os.path.dirname(_TEST_ROOT)
+_PROJECT_ROOT = os.path.join(_HOME_ROOT, "Sentimental_Analysis_for_Tweets_NLP/src/models")
+_DATA_ROOT = os.path.join(_HOME_ROOT, "Sentimental_Analysis_for_Tweets_NLP/data/raw/sentiment_tweets3.csv")
+sys.path.append(_PROJECT_ROOT)
+# sys.path.append("../Sentimental_Analysis_for_Tweets_NLP/src/models")
 
 # from TweetsDataset import *
 from TweetsDataset import TweetsDataset
@@ -22,7 +28,7 @@ PRE_TRAINED_MODEL_NAME = 'bert-base-cased'
 class_names = ['Not Depressed', 'Depressed']
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
-df = pd.read_csv(f'../../data/raw/sentiment_tweets3.csv', encoding = 'latin-1')
+df = pd.read_csv(_DATA_ROOT, encoding = 'latin-1')
 tokenizer = BertTokenizer.from_pretrained('bert-base-cased')
 loss_fn = nn.CrossEntropyLoss()
 
