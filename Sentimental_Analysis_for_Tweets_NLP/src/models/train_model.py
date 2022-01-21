@@ -29,6 +29,9 @@ from functions import create_data_loader
 from model import DepressionClassifier
 from functions import train_epoch, eval_model, loss_accuracy_plots
 
+from omegaconf import OmegaConf
+config = OmegaConf.load('config.yaml')
+
 
 @click.command()
 @click.argument("model_output_filepath", type=click.Path())
@@ -38,10 +41,10 @@ def main(model_output_filepath="models", data_filepath="data/processed", figures
     """Trains model and saves it for evaluation"""
     
     #HYPER PARAMETERS
-    PRE_TRAINED_MODEL_NAME = 'bert-base-cased'
-    MAX_LEN = 160
-    BATCH_SIZE = 16
-    EPOCHS = 5
+    PRE_TRAINED_MODEL_NAME = config.hyperparameters.PRE_TRAINED_MODEL_NAME
+    MAX_LEN = config.hyperparameters.MAX_LEN
+    BATCH_SIZE = config.hyperparameters.BATCH_SIZE
+    EPOCHS = config.hyperparameters.BATCH_SIZE
     
     #Reading raw data
     df = pd.read_csv(f'{data_filepath}/sentiment_tweets3.csv', encoding = 'latin-1')

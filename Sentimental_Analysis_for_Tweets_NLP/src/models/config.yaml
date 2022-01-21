@@ -1,0 +1,7 @@
+#config.yaml
+hyperparameters:
+  BATCH_SIZE: 16
+  MAX_LEN: 160
+  PRE_TRAINED_MODEL_NAME: 'bert-base-cased'
+  EPOCHS: 5
+  
