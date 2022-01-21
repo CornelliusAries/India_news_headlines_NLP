@@ -21,3 +21,8 @@ To use our deployed depression classifier type this command to your Linux termin
 curl -X POST "https://europe-west1-twitter-depression-classifier.cloudfunctions.net/model_predict-10" -H "Content-Type:application/json" --data '{"input_data":"Tweet to examine"}'
 
 Where {"input_data":"Tweet to examine"}' is the tweet you want to examine.
+
+## Authors:
+Chen Liang <br />
+Karol Kubala <br />
+Kornel Kowalczyk 
