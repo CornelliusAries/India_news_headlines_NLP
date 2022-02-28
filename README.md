@@ -1,7 +1,5 @@
 # Project description:
-[OUTDATED] Based on the headline_text column provided by the dataset India News Headlines Dataset, determine what emotions may be associated with this article - Sentiment analysis.
 
-Due to dataset issues we decided to change it for Sentimental Analysis for Tweets dataset which is a similar NLP problem.
 ## Goal of the project
 Based on the "message to examine" column provided by the dataset, determine if author of the tweet is depressed or not.
 
